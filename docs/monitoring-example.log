@@ -1,0 +1,15 @@
+2026-11-03T08:40:15Z status=DOWN code=000 url=http://127.0.0.1:18180
+2026-11-03T08:40:16Z status=UP code=200 url=http://127.0.0.1:18180
+2026-11-03T08:40:16Z DEPLOY status=SUCCESS slot=blue port=18180
+2026-11-03T08:40:16Z status=UP code=200 url=http://127.0.0.1:18180
+2026-11-03T08:40:16Z status=DOWN code=000 url=http://127.0.0.1:18181
+2026-11-03T08:40:17Z status=UP code=200 url=http://127.0.0.1:18181
+2026-11-03T08:40:17Z DEPLOY status=SUCCESS slot=green port=18181
+2026-11-03T08:40:17Z status=UP code=200 url=http://127.0.0.1:18181
+2026-11-03T08:40:17Z status=DOWN code=000 url=http://127.0.0.1:18180
+2026-11-03T08:40:18Z status=DOWN code=503 url=http://127.0.0.1:18180
+2026-11-03T08:40:19Z ROLLBACK reason=unhealthy-candidate slot=blue active=green
+2026-11-03T08:40:19Z status=UP code=200 url=http://127.0.0.1:18181
+2026-11-03T08:41:19Z status=DOWN code=000 url=http://127.0.0.1:18180
+2026-11-03T08:41:20Z status=UP code=200 url=http://127.0.0.1:18180
+2026-11-03T08:41:20Z DEPLOY status=SUCCESS slot=blue port=18180
