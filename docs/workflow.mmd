@@ -1,0 +1,7 @@
+flowchart LR
+    A[Push or Pull Request] --> B[Build: javac and JAR]
+    B --> C[Test: 31 unit/API tests]
+    C --> D[Deploy: Blue-Green]
+    D --> E{Health check OK?}
+    E -->|Yes| F[Activate candidate + log success]
+    E -->|No| G[Rollback: preserve previous version]
