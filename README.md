@@ -17,45 +17,14 @@ QueueFlow არის პატარა ვებაპლიკაცია �
 
 გამოყენებულია **Java-ს სტანდარტული HTTP სერვერი** (`com.sun.net.httpserver.HttpServer`), HTML, CSS და Vanilla JavaScript. გარე ბიბლიოთეკები არ სჭირდება. ტესტებიც დამოუკიდებელი Java test runner-ით მუშაობს. ეს არჩევანი განზრახ გაკეთდა, რომ CI მარტივი, გამჭვირვალე და სწრაფი იყოს.
 
-> მონაცემები ამ სასწავლო ვერსიაში **მეხსიერებაში** ინახება. სერვერის გადატვირთვა რიგს თავიდან იწყებს. აქ ყურადღება გამახვილებულია DevOps პროცესზე და არა მუდმივ მონაცემთა ბაზაზე. აპლიკაცია დემოა და არ არის განკუთვნილი საჯარო მომხმარებლების მონაცემებისთვის ან რეალური წარმოებისთვის.
-
 ## 2. პროექტის გაშვება ლოკალურად
 
 საჭიროა **Java JDK 17 ან უფრო ახალი**, Git Bash / Linux / macOS-ის Bash და `curl`.
-
-```bash
-# 1. კომპილაცია და გამზადებული JAR
-bash scripts/build.sh
-
-# 2. ავტომატური ტესტები
-bash scripts/test.sh
-
-# 3. სერვერის გაშვება
-java -jar build/queueflow.jar --port 8080
-```
-
-ბრაუზერში გახსენით **http://localhost:8080**. სერვერის გასაჩერებლად გამოიყენეთ `Ctrl + C`.
-
-ჯანმრთელობის შემოწმება სხვა ტერმინალიდან:
-
-```bash
-curl http://localhost:8080/api/health
-# {"status":"ok","service":"QueueFlow"}
-```
 
 ## 3. Git და ბრენჩები
 
 რეპოზიტორიაში გვაქვს ორი ბრენჩი — `main` და `dev`. ცვლილებების შეტყობინებები მოკლე და შინაარსიანია (`feat`, `test`, `ci`, `docs`). სამუშაო მიმდინარეობა: განვითარება `dev`-ზე → შემოწმება → გადატანა `main`-ში.
 
-სხვა GitHub ანგარიშზე ასატვირთად შექმენით **ცარიელი public repository** `QueueFlow-DevOps` (არ დაამატოთ GitHub-იდან ახალი README/`.gitignore`), შემდეგ უკვე გაშლილი პროექტის საქაღალდეში:
-
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/QueueFlow-DevOps.git
-git push -u origin main
-git push -u origin dev
-```
-
-თუ `origin` უკვე არსებობს: `git remote set-url origin https://github.com/YOUR_USERNAME/QueueFlow-DevOps.git`.
 
 ## 4. CI/CD Pipeline — სამი ძირითადი Job
 
@@ -123,45 +92,8 @@ flowchart LR
     E -->|Failed| G[Rollback / keep old slot]
 ```
 
-## 8. სქრინშოტები და მტკიცებულებები
 
-### A. მომუშავე აპლიკაცია — ლოკალური გაშვება
 
-ქვემოთ ჩანს Java სერვერთან დაკავშირებული აპლიკაცია: რეგისტრირებული ბილეთები, მოლოდინის რაოდენობა, აქტიური ბილეთი და დასრულებული მომსახურება.
-
-![QueueFlow running locally](docs/screenshots/app-running.png)
-
-### B. Unit Test-ების გაშვება
-
-ლოკალურად გაშვებული `bash scripts/test.sh` ბრძანების რეალური შედეგი: **31 passed, 0 failed**. სურათი აჩვენებს ტესტების ტექსტურ შედეგს.
-
-![31 passed automated tests](docs/screenshots/unit-tests.png)
-
-### C. GitHub Actions — საბოლოოდ დასამატებელი სქრინშოტი
-
-**ეს ჯერ რეალური GitHub Actions-ის სქრინშოტი არ არის.** GitHub-ზე რეპოზიტორიის ატვირთვის შემდეგ გახსენით **Actions → QueueFlow CI/CD → წარმატებული Run**, გადაიღეთ ერთი სქრინი, სადაც ჩანს სამივე მწვანე Job (**Build, Test, Deploy**), და შეინახეთ `docs/screenshots/actions-success.png` სახელით.
-
-**სანამ სქრინს არ დაამატებთ, ეს მოთხოვნა ბოლომდე შესრულებული არ არის.** ქვემოთ მხოლოდ ადგილმონაცვლეა:
-
-![GitHub Actions screenshot pending — placeholder, not proof](docs/screenshots/actions-pending.svg)
-
-ახალი სურათის დამატების შემდეგ შეცვალეთ წინა Markdown ხაზი ასეთით:
-
-```markdown
-![Successful Build, Test and Deploy](docs/screenshots/actions-success.png)
-```
-
-და ატვირთეთ:
-
-```bash
-git add README.md docs/screenshots/actions-success.png
-git commit -m "docs: add successful GitHub Actions screenshot"
-git push origin main
-```
-
-### D. მობილური ვერსია (დამატებითი)
-
-![QueueFlow mobile preview](docs/screenshots/mobile-preview.png)
 
 ## 9. API და კოდის ორგანიზაცია
 
@@ -191,6 +123,4 @@ git push origin main
 - [ ] Commit-ები გაკეთებულია **03.11.2026, 23:59-მდე**;
 - [ ] სასწავლო სისტემაში ატვირთულია მხოლოდ რეპოზიტორიის URL.
 
----
 
-*ეს არის სასწავლო DevOps პროექტი, რომელიც აჩვენებს სრულ CI/CD პროცესს ლოკალური Deployment სტრატეგიით.*
