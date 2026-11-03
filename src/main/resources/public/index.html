@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111c32">
+  <title>QueueFlow — Service queue dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="QueueFlow home"><span class="brand-icon">Q<span class="brand-dot">.</span></span> <span>Queue<span class="brand-light">Flow</span></span></a>
+      <div class="workspace">WORKSPACE</div>
+      <div class="nav-item selected"><span>▦</span> Overview</div>
+      <div class="nav-item"><span>≡</span> Tickets</div>
+      <div class="sidebar-bottom"><span class="online-dot"></span> Local service desk <small>Demo workspace · v1.0</small></div>
+    </aside>
+    <main>
+      <header class="topbar"><div class="breadcrumbs">Workspace <span>/</span> Dashboard</div><div class="live"><span class="online-dot"></span> <span id="server-status">Checking service</span></div></header>
+      <section class="content">
+        <div class="intro"><div><div class="eyebrow">SERVICE DESK / OVERVIEW</div><h1>Keep every queue moving<span class="accent">.</span></h1><p>Issue tickets, serve the next visitor, and track progress from one place.</p></div><span class="date-chip">● Live dashboard</span></div>
+        <div class="cards">
+          <article class="metric"><div class="metric-top"><span>Waiting in queue</span><span class="metric-icon amber">◷</span></div><strong id="waiting-count">0</strong><p>Visitors waiting to be served</p></article>
+          <article class="metric"><div class="metric-top"><span>Currently serving</span><span class="metric-icon blue">↗</span></div><strong id="serving-count">0</strong><p>At the service counter now</p></article>
+          <article class="metric"><div class="metric-top"><span>Completed tickets</span><span class="metric-icon green">✓</span></div><strong id="done-count">0</strong><p>Successfully served today</p></article>
+        </div>
+        <div class="columns">
+          <section class="panel form-panel"><div class="panel-header"><div><span class="section-kicker">01 / CREATE</span><h2>New ticket</h2><p>Register a visitor in the queue.</p></div><span class="panel-glyph">＋</span></div>
+            <form id="ticket-form"><label for="customer">Customer name</label><input type="text" id="customer" name="customer" placeholder="e.g. Nino Kapanadze" minlength="2" maxlength="40" required autocomplete="off"><label for="service">Service category</label><select id="service" name="service"><option value="Documents">Documents & certificates</option><option value="Payments">Payments & billing</option><option value="Technical">Technical support</option></select><button class="button primary" type="submit">+ Issue a new ticket</button></form>
+            <div class="tip"><span>✦</span><div><b>How it works</b><br>Tickets are served in the order they arrive (FIFO).</div></div>
+          </section>
+          <section class="panel operations"><div class="panel-header"><div><span class="section-kicker">02 / SERVICE DESK</span><h2>Current service</h2><p>Manage visitors at your counter.</p></div><span class="panel-glyph">↗</span></div>
+            <div class="current-card"><div class="subline"><span class="online-dot"></span> NOW SERVING</div><strong id="active-number">—</strong><div id="active-name">No active ticket</div><span id="active-service">Call the next visitor to begin</span></div>
+            <div class="operation-buttons"><button id="next-button" class="button primary" type="button">Call next <span>→</span></button><button id="finish-button" class="button secondary" type="button">✓ Finish ticket</button></div>
+            <div class="tip"><span>ⓘ</span><div>Only one ticket can be active at a time.</div></div>
+          </section>
+        </div>
+        <section class="panel tickets-panel"><div class="panel-header tickets-heading"><div><span class="section-kicker">03 / ALL TICKETS</span><h2>Queue activity <span class="count-chip" id="total-count">0</span></h2><p>A quick view of every registered ticket.</p></div><div class="filters"><label class="sr-only" for="status-filter">Filter by status</label><select id="status-filter"><option value="ALL">All tickets</option><option value="WAITING">Waiting</option><option value="SERVING">Serving</option><option value="DONE">Completed</option></select></div></div>
+          <div class="table-wrap"><table><thead><tr><th>TICKET</th><th>CUSTOMER</th><th>SERVICE</th><th>STATUS</th></tr></thead><tbody id="ticket-rows"><tr><td colspan="4" class="empty">No tickets yet. Add your first visitor above.</td></tr></tbody></table></div>
+        </section>
+        <footer>Built for simple, reliable service workflows. <span>QueueFlow · Java 17+ · CI/CD demo</span></footer>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
