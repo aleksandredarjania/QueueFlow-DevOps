@@ -1,0 +1,98 @@
+name: QueueFlow CI/CD
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Install Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Compile and package application
+        run: bash scripts/build.sh
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: queueflow-jar
+          path: build/queueflow.jar
+          if-no-files-found: error
+
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Download compiled artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: queueflow-jar
+          path: build
+      - name: Run automated unit and HTTP API tests
+        run: bash scripts/test.sh
+
+  deploy:
+    name: Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Download tested artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: queueflow-jar
+          path: build
+      - name: Deploy blue release and verify health
+        run: |
+          bash scripts/deploy.sh
+          bash scripts/monitor.sh --once
+      - name: Switch to green release
+        run: |
+          bash scripts/deploy.sh
+          bash scripts/monitor.sh --once
+      - name: Verify rollback on unhealthy release
+        run: |
+          OLD_SLOT="$(readlink production/current)"
+          if INJECT_FAILURE=1 CHECK_ATTEMPTS=3 bash scripts/deploy.sh; then
+            echo 'Expected unhealthy deployment to fail.' >&2
+            exit 1
+          fi
+          test "$(readlink production/current)" = "$OLD_SLOT"
+          bash scripts/monitor.sh --once
+          grep -q 'ROLLBACK reason=unhealthy-candidate' production/monitoring.log
+          echo 'Rollback verified: healthy release remains active.'
+      - name: Upload deployment and monitoring logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-logs
+          path: |
+            production/monitoring.log
+            production/blue/server.log
+            production/green/server.log
+          if-no-files-found: ignore
+      - name: Stop local app
+        if: always()
+        run: bash scripts/stop.sh
