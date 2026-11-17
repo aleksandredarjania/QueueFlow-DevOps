@@ -1,0 +1,15 @@
+
+services:
+  queueflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: queueflow-app
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "java -jar app.jar --help"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
