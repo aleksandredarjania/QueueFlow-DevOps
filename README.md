@@ -112,13 +112,7 @@ flowchart LR
 - `.github/workflows/ci-cd.yml` — GitHub Actions;
 - `docs/` — სამუშაო დიაგრამა, სქრინშოტები და მონიტორინგის მაგალითი.
 
-## 10. ჩაბარებამდე შემოწმება
 
-- [ ] რეპოზიტორია **Public** რეჟიმშია და აქვს `main` და `dev`;
-- [ ] Actions-ში **Build → Test → Deploy** რეალურად წარმატებულია;
-- [ ] README-ში სამივე **რეალური** სქრინშოტია (Pipeline, Tests, App);
-- [ ] Workflow diagram და Monitoring-ის აღწერა README-ში ჩანს;
-- [ ] Commit-ები გაკეთებულია **03.11.2026, 23:59-მდე**;
 - [ ] სასწავლო სისტემაში ატვირთულია მხოლოდ რეპოზიტორიის URL.
 
 
